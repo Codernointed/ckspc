@@ -494,7 +494,6 @@ const PresidingLeadersSection = ({ leaders }: { leaders: Leader[] }) => (
                 </h3>
                 <span
                   style={{
-                    display: 'inline-block',
                     fontSize: '0.72rem',
                     fontWeight: 600,
                     letterSpacing: '0.1em',
