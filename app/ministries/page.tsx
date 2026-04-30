@@ -1,7 +1,6 @@
 'use client';
 
-import { useRef } from 'react';
-import { motion, useInView } from 'framer-motion';
+import { motion } from 'framer-motion';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 
@@ -46,16 +45,13 @@ const ImageCard = ({
   minHeight,
   index,
 }: ImageCardProps) => {
-  const ref = useRef<HTMLDivElement>(null);
-  const inView = useInView(ref, { once: true, margin: '-60px' });
-
   return (
     <motion.div
-      ref={ref}
       custom={index}
       variants={scaleIn}
       initial="hidden"
-      animate={inView ? 'visible' : 'hidden'}
+      whileInView="visible"
+      viewport={{ once: true, margin: '-60px' }}
       style={{
         gridColumn,
         gridRow,
@@ -179,16 +175,13 @@ interface LightCardProps {
 }
 
 const LightCard = ({ title, description, icon, gridColumn, gridRow, index }: LightCardProps) => {
-  const ref = useRef<HTMLDivElement>(null);
-  const inView = useInView(ref, { once: true, margin: '-60px' });
-
   return (
     <motion.div
-      ref={ref}
       custom={index}
       variants={fadeUp}
       initial="hidden"
-      animate={inView ? 'visible' : 'hidden'}
+      whileInView="visible"
+      viewport={{ once: true, margin: '-60px' }}
       style={{
         gridColumn,
         gridRow,
@@ -249,9 +242,6 @@ const LightCard = ({ title, description, icon, gridColumn, gridRow, index }: Lig
 };
 
 const Ministries = () => {
-  const heroRef = useRef<HTMLElement>(null);
-  const heroInView = useInView(heroRef, { once: true, margin: '-40px' });
-
   return (
     <div style={{ position: 'relative', overflow: 'hidden' }}>
       <Header />
@@ -259,7 +249,6 @@ const Ministries = () => {
       <main>
         {/* Hero Section */}
         <section
-          ref={heroRef}
           style={{
             position: 'relative',
             paddingTop: 'clamp(10rem, 18vh, 14rem)',
@@ -315,7 +304,8 @@ const Ministries = () => {
           <div style={{ position: 'relative', zIndex: 1, maxWidth: '760px', margin: '0 auto' }}>
             <motion.span
               initial={{ opacity: 0, y: 20 }}
-              animate={heroInView ? { opacity: 1, y: 0 } : {}}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: '-40px' }}
               transition={{ duration: 0.6, ease: [0.4, 0, 0.2, 1] }}
               style={{
                 display: 'inline-block',
@@ -335,7 +325,8 @@ const Ministries = () => {
 
             <motion.h1
               initial={{ opacity: 0, y: 30 }}
-              animate={heroInView ? { opacity: 1, y: 0 } : {}}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: '-40px' }}
               transition={{ duration: 0.7, delay: 0.1, ease: [0.4, 0, 0.2, 1] }}
               style={{
                 fontFamily: 'var(--font-serif)',
@@ -352,7 +343,8 @@ const Ministries = () => {
 
             <motion.p
               initial={{ opacity: 0, y: 30 }}
-              animate={heroInView ? { opacity: 1, y: 0 } : {}}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: '-40px' }}
               transition={{ duration: 0.7, delay: 0.2, ease: [0.4, 0, 0.2, 1] }}
               style={{
                 fontSize: 'clamp(1rem, 2vw, 1.15rem)',
