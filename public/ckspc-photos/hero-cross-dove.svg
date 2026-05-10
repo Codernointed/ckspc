@@ -1,0 +1,47 @@
+<svg width="1600" height="900" viewBox="0 0 1600 900" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="900" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#FFF7DD"/>
+      <stop offset="0.35" stop-color="#FFEAB4"/>
+      <stop offset="0.7" stop-color="#F7C77A"/>
+      <stop offset="1" stop-color="#D89A4D"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(520 220) rotate(90) scale(420 520)">
+      <stop offset="0" stop-color="#FFFFFF" stop-opacity="0.98"/>
+      <stop offset="0.42" stop-color="#FFF2C8" stop-opacity="0.9"/>
+      <stop offset="1" stop-color="#FFF2C8" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="soft" x="0" y="0" width="1600" height="900" filterUnits="userSpaceOnUse">
+      <feGaussianBlur stdDeviation="18"/>
+    </filter>
+  </defs>
+
+  <rect width="1600" height="900" fill="url(#sky)"/>
+  <rect width="1600" height="900" fill="url(#glow)"/>
+
+  <g opacity="0.4" filter="url(#soft)">
+    <ellipse cx="1220" cy="650" rx="260" ry="80" fill="#C88539"/>
+    <ellipse cx="275" cy="690" rx="220" ry="70" fill="#B8742C"/>
+    <ellipse cx="760" cy="770" rx="600" ry="110" fill="#A45F22"/>
+  </g>
+
+  <g opacity="0.72">
+    <path d="M118 709C185 669 254 645 329 642C379 641 442 651 482 668C519 684 566 699 613 709H118Z" fill="#6D4A22"/>
+    <path d="M0 760C88 728 180 708 278 703C361 698 451 710 525 734C603 759 673 768 768 760H0Z" fill="#7C5428"/>
+    <path d="M685 786C745 772 813 762 886 760C1001 757 1095 773 1177 792H685Z" fill="#8A5E31"/>
+    <path d="M1093 787C1176 765 1263 753 1347 756C1425 759 1494 771 1600 793H1093Z" fill="#744D24"/>
+  </g>
+
+  <g transform="translate(266 178)">
+    <rect x="0" y="0" width="52" height="455" rx="8" fill="#DFA44A"/>
+    <rect x="-95" y="144" width="240" height="52" rx="8" fill="#DFA44A" transform="rotate(4 -95 144)"/>
+    <rect x="7" y="-6" width="38" height="150" rx="8" fill="#E3B35E"/>
+  </g>
+
+  <g opacity="0.8">
+    <ellipse cx="1280" cy="238" rx="56" ry="28" fill="#FFF6D9"/>
+    <path d="M1247 238C1270 223 1297 214 1328 212C1315 226 1308 240 1310 257C1287 253 1266 247 1247 238Z" fill="#FFFDF5"/>
+    <path d="M1322 211C1340 190 1365 170 1397 153C1391 178 1389 201 1393 223C1369 218 1345 215 1322 211Z" fill="#FFFDF5"/>
+    <circle cx="1323" cy="231" r="4" fill="#D7A95D"/>
+  </g>
+</svg>

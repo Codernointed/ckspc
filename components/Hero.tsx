@@ -19,7 +19,7 @@ const SLIDES = [
       'Every Sunday we gather to worship, praise, and grow together in the Spirit.',
   },
   {
-    bg: 'https://images.unsplash.com/photo-1545987796-200677ee1011?q=80&w=1920&auto=format&fit=crop',
+    bg: '/ckspc-photos/3rdhero.png',
     label: 'Growing Together',
     title: 'Building Faith,\nTransforming Lives',
     subtitle:
