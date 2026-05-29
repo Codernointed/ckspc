@@ -12,26 +12,32 @@ import ConnectCta from '@/components/ConnectCta';
 import Footer from '@/components/Footer';
 import OrganicElements from '@/components/OrganicElements';
 import ThreadConnector from '@/components/ThreadConnector';
+import { getHomeContent } from '@/lib/content';
 
-export default function Home() {
+// Content is admin-editable and read at request time.
+export const dynamic = 'force-dynamic';
+
+export default async function Home() {
+  const content = await getHomeContent();
+
   return (
     <div style={{ position: 'relative', overflow: 'hidden' }}>
       <OrganicElements />
       <Header />
       <main>
         <Hero />
-        <Welcome />
+        <Welcome content={content.welcome} />
         <StatsStrip />
         <ThreadConnector />
         <Services />
-        <VisionMission />
+        <VisionMission content={content.vision_mission} />
         <ThreadConnector flip />
         <Founder />
         <GalleryStrip />
         <Branches />
         <ThreadConnector />
         <Sermons />
-        <ConnectCta />
+        <ConnectCta content={content.connect_cta} />
       </main>
       <Footer />
     </div>

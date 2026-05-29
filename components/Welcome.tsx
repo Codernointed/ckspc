@@ -10,7 +10,14 @@ const features = [
   { icon: '🌍', title: 'Church Planting', desc: 'Spreading the Gospel globally' },
 ];
 
-const Welcome = () => {
+type WelcomeContent = { label?: string; title?: string; body?: string };
+
+const Welcome = ({ content }: { content?: WelcomeContent }) => {
+  const label = content?.label ?? 'Welcome to CKSPC';
+  const title = content?.title ?? 'Bringing All People to the Saving Knowledge of Christ';
+  const body =
+    content?.body ??
+    "Christ Kingdom Salvation Pentecostal Church is a non-profit Pentecostal church headquartered in Accra, Ghana. We exist to bring all people everywhere to the saving knowledge of our Lord Jesus Christ through the proclamation of the gospel, the planting of churches and the equipping of believers for every God-glorifying service.";
   return (
     <section className="welcome" id="about">
       <div className="welcome-inner">
@@ -44,17 +51,9 @@ const Welcome = () => {
           viewport={{ once: true, margin: '-10%' }}
           transition={{ duration: 0.8, delay: 0.15, ease: [0.25, 0.46, 0.45, 0.94] }}
         >
-          <span className="section-label">Welcome to CKSPC</span>
-          <h2 className="section-title">
-            Bringing All People to the<br />
-            Saving Knowledge of Christ
-          </h2>
-          <p className="welcome-desc">
-            Christ Kingdom Salvation Pentecostal Church is a non-profit Pentecostal church
-            headquartered in Accra, Ghana. We exist to bring all people everywhere to the
-            saving knowledge of our Lord Jesus Christ through the proclamation of the gospel,
-            the planting of churches and the equipping of believers for every God-glorifying service.
-          </p>
+          <span className="section-label">{label}</span>
+          <h2 className="section-title">{title}</h2>
+          <p className="welcome-desc">{body}</p>
           <div className="welcome-features">
             {features.map((f) => (
               <div key={f.title} className="welcome-feature">
