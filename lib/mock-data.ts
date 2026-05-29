@@ -101,6 +101,7 @@ export const navGroups: NavGroup[] = [
     heading: "Overview",
     items: [
       { label: "HQ Dashboard", href: "/hq" },
+      { label: "Branches", href: "/branches" },
       { label: "Branch view", href: "/branch/madina-central" },
     ],
   },

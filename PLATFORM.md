@@ -96,15 +96,23 @@ The sidebar shows only the modules a role can reach (RBAC). Visit `/website` as 
 
 ## Status & next steps
 
-**Done (foundation + first slice):**
+**Done:**
 - Two codebases merged into one app with isolated styling.
 - Neon + Drizzle + Auth.js + RBAC foundation.
 - Admin login + role-aware navigation + sign-out.
 - Editable homepage content, end-to-end (admin → DB → public), verified.
+- **Branches fully DB-driven**: public directory reads from the DB; admin `/branches`
+  lets you add (church plants), edit (name, location, pastor, service times, photo, HQ
+  flag), and delete branches — changes publish to the public site instantly. New branches
+  get their own `/branch/[slug]` dashboard automatically.
+- **Downloadable user guide** — `CKSPC_Platform_Guide.docx` (walkthrough + logins + how-to).
 
-**Next, module by module** (all admin pages currently render from `lib/mock-data.ts`):
-1. Migrate **Members**, **Branches**, **Finance**, **Welfare** to the DB (schema tables → server queries → forms/actions), reusing the `site_content`/server-action pattern.
-2. Add **per-route module guards** so direct URLs (not just the nav) enforce RBAC.
-3. Extend the CMS to the **hero carousel, branch directory, sermons, gallery, leadership** pages.
-4. Audit logging, maker/checker on finance, digital giving (Paystack), notifications (SMS/email) — per the vision doc roadmap.
-5. Multi-tenancy (`church_id`) for the eventual SaaS phase.
+**Next, module by module** (remaining admin pages render from `lib/mock-data.ts`):
+1. Migrate **Members**, **Finance**, **Welfare** to the DB, reusing the branches/`site_content`
+   server-action pattern.
+2. **User-invite screen** under Roles & access (create logins without touching the DB).
+3. Add **per-route module guards** so direct URLs (not just the nav) enforce RBAC.
+4. Extend the CMS to the **hero carousel, stats, gallery, leadership** sections.
+5. **Image upload** for branches/content (needs a storage bucket — e.g. Vercel Blob / R2).
+6. Audit logging, maker/checker on finance, digital giving (Paystack), notifications.
+7. Multi-tenancy (`church_id`) for the eventual SaaS phase.

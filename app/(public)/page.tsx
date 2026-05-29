@@ -13,12 +13,24 @@ import Footer from '@/components/Footer';
 import OrganicElements from '@/components/OrganicElements';
 import ThreadConnector from '@/components/ThreadConnector';
 import { getHomeContent } from '@/lib/content';
+import { getBranches, mapsUrl } from '@/lib/branches';
 
 // Content is admin-editable and read at request time.
 export const dynamic = 'force-dynamic';
 
 export default async function Home() {
   const content = await getHomeContent();
+  const branchRows = await getBranches();
+  const branchItems = branchRows.map((b) => ({
+    name: b.name,
+    address: b.address ?? '',
+    area: b.area ?? '',
+    service: b.serviceTimes ?? '',
+    phone: b.phone ?? '',
+    isHQ: b.isHq,
+    img: b.imageUrl ?? '',
+    mapsHref: mapsUrl(b),
+  }));
 
   return (
     <div style={{ position: 'relative', overflow: 'hidden' }}>
@@ -34,7 +46,7 @@ export default async function Home() {
         <ThreadConnector flip />
         <Founder />
         <GalleryStrip />
-        <Branches />
+        <Branches items={branchItems} />
         <ThreadConnector />
         <Sermons />
         <ConnectCta content={content.connect_cta} />

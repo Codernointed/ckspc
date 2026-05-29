@@ -17,6 +17,8 @@ type SidebarUser = {
 /** Derive the RBAC module key from a nav href (first path segment). */
 function moduleFromHref(href: string): ModuleKey {
   const seg = href.split("/").filter(Boolean)[0] ?? "hq";
+  // The branch directory + per-branch view both map to the "branch" module.
+  if (seg === "branches") return "branch";
   return seg as ModuleKey;
 }
 

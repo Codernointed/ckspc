@@ -2,24 +2,34 @@ import { Topbar } from "../../../../components/Topbar";
 import { Kpi } from "../../../../components/dashboard/Kpi";
 import { StackedBars } from "../../../../components/dashboard/BarChart";
 import {
-  branches,
-  getBranch,
   branchAttendance,
   upcomingEvents,
   announcements,
   inventoryAlerts,
   formatGHS,
 } from "../../../../lib/mock-data";
+import { getBranchBySlug } from "../../../../lib/branches";
 import { notFound } from "next/navigation";
 
-export function generateStaticParams() {
-  return branches.map((b) => ({ slug: b.slug }));
-}
+export const dynamic = "force-dynamic";
 
 export default async function BranchDashboardPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const branch = getBranch(slug);
-  if (!branch) notFound();
+  const row = await getBranchBySlug(slug);
+  if (!row) notFound();
+
+  // Identity from the database; analytics below remain illustrative.
+  const branch = {
+    name: row.name,
+    code: row.code,
+    tier: row.tier ?? "Branch",
+    pastor: row.pastor ?? "—",
+    region: row.region ?? "—",
+    district: row.district ?? "—",
+    members: row.members ?? 0,
+    attendanceRate: row.attendanceRate ?? 0,
+    giving: row.giving ?? 0,
+  };
 
   const branchEvents = upcomingEvents.filter((e) =>
     e.who.toLowerCase().includes(branch.name.toLowerCase()) ||
