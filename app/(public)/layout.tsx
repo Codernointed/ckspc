@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import './globals.css';
+import '../globals.css';
 import LenisProvider from '@/lib/LenisProvider';
 
 export const metadata: Metadata = {
@@ -58,7 +58,7 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default function PublicRootLayout({
   children,
 }: {
   children: React.ReactNode;
