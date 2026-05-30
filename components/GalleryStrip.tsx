@@ -1,6 +1,6 @@
 'use client';
 
-const IMAGES = [
+const DEFAULT_IMAGES = [
   'https://images.unsplash.com/photo-1438232992991-995b7058bbb3?q=80&w=600&auto=format&fit=crop',
   'https://images.unsplash.com/photo-1507692049790-de58290a4334?q=80&w=600&auto=format&fit=crop',
   'https://images.unsplash.com/photo-1545987796-200677ee1011?q=80&w=600&auto=format&fit=crop',
@@ -9,8 +9,9 @@ const IMAGES = [
   'https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=600&auto=format&fit=crop',
 ];
 
-const GalleryStrip = () => {
-  const doubled = [...IMAGES, ...IMAGES];
+const GalleryStrip = ({ images }: { images?: string[] }) => {
+  const list = images && images.length > 0 ? images : DEFAULT_IMAGES;
+  const doubled = [...list, ...list];
 
   return (
     <section className="gallery-strip" aria-label="Photo gallery">

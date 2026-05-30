@@ -112,3 +112,22 @@ export const siteContent = pgTable(
 
 export type SiteContent = typeof siteContent.$inferSelect;
 export type NewSiteContent = typeof siteContent.$inferInsert;
+
+/**
+ * Generic list/collection store for editable website lists —
+ * leadership, ministries, gallery, etc. One row per item; `data`
+ * holds the item's fields (shape defined per collection in
+ * lib/collections.ts). `sort` controls display order.
+ */
+export const contentItems = pgTable("content_items", {
+  id: serial("id").primaryKey(),
+  collection: text("collection").notNull(), // e.g. "leadership"
+  sort: integer("sort").notNull().default(0),
+  visible: boolean("visible").notNull().default(true),
+  data: jsonb("data").$type<Record<string, string>>().notNull(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
+  updatedBy: text("updated_by"),
+});
+
+export type ContentItem = typeof contentItems.$inferSelect;
+export type NewContentItem = typeof contentItems.$inferInsert;

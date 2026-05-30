@@ -3,9 +3,10 @@ config({ path: ".env.local" });
 
 import bcrypt from "bcryptjs";
 import { db } from "./index";
-import { users, churchProfile, branches, siteContent } from "./schema";
+import { users, churchProfile, branches, siteContent, contentItems } from "./schema";
 import { sql, eq } from "drizzle-orm";
 import { homeDefaults } from "../content";
+import { COLLECTIONS } from "../collections";
 
 async function main() {
   console.log("Seeding CKSPC platform database…");
@@ -83,6 +84,20 @@ async function main() {
     await db
       .insert(siteContent)
       .values({ page: "home", section, data, updatedBy: "seed" });
+  }
+
+  // ── Website collections (leadership, ministries, gallery) ──
+  for (const col of COLLECTIONS) {
+    await db.delete(contentItems).where(eq(contentItems.collection, col.key));
+    let sort = 0;
+    for (const data of col.defaults) {
+      await db.insert(contentItems).values({
+        collection: col.key,
+        sort: sort++,
+        data,
+        updatedBy: "seed",
+      });
+    }
   }
 
   const [{ count: userCount }] = await db

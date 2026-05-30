@@ -14,12 +14,15 @@ import OrganicElements from '@/components/OrganicElements';
 import ThreadConnector from '@/components/ThreadConnector';
 import { getHomeContent } from '@/lib/content';
 import { getBranches, mapsUrl } from '@/lib/branches';
+import { getCollectionItems } from '@/lib/collections';
 
 // Content is admin-editable and read at request time.
 export const dynamic = 'force-dynamic';
 
 export default async function Home() {
   const content = await getHomeContent();
+  const galleryItems = await getCollectionItems('gallery');
+  const galleryImages = galleryItems.map((g) => g.imageUrl).filter(Boolean);
   const branchRows = await getBranches();
   const branchItems = branchRows.map((b) => ({
     name: b.name,
@@ -45,7 +48,7 @@ export default async function Home() {
         <VisionMission content={content.vision_mission} />
         <ThreadConnector flip />
         <Founder />
-        <GalleryStrip />
+        <GalleryStrip images={galleryImages} />
         <Branches items={branchItems} />
         <ThreadConnector />
         <Sermons />

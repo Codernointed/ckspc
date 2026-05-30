@@ -1,7 +1,9 @@
+import Link from "next/link";
 import { Topbar } from "../../../components/Topbar";
 import { PageHead } from "../../../components/PageHead";
 import { SectionEditor } from "../../../components/website/SectionEditor";
 import { HOME_SECTIONS, getHomeContent } from "../../../lib/content";
+import { COLLECTIONS, getCollectionRows } from "../../../lib/collections";
 import { auth } from "../../../lib/auth/config";
 import { canAccess } from "../../../lib/auth/rbac";
 
@@ -19,14 +21,9 @@ export default async function WebsiteContentPage() {
           eyebrow="Public site · content"
           title="Edit the"
           emphasis="public website."
-          lede="Changes here publish straight to ckspc.org. Edit the words your visitors read — no developer needed."
+          lede="Everything visitors read and see — managed here. Changes publish to the live site immediately."
           actions={
-            <a
-              href="/"
-              target="_blank"
-              rel="noreferrer"
-              className="btn btn-secondary"
-            >
+            <a href="/" target="_blank" rel="noreferrer" className="btn btn-secondary">
               View live site ↗
             </a>
           }
@@ -45,13 +42,45 @@ export default async function WebsiteContentPage() {
           </div>
         ) : (
           <>
-            <p
-              className="muted"
-              style={{ maxWidth: 640, marginBottom: "var(--space-5)", fontSize: "var(--fs-sm)" }}
-            >
-              The homepage is assembled from the editable sections below. The
-              hero, branch directory, sermons and gallery are managed in their
-              own modules and will appear here as those are wired in.
+            {/* Collections (lists you can add to / reorder) */}
+            <h2 style={{ fontSize: "var(--fs-lg)", marginBottom: "var(--space-2)" }}>
+              Pages &amp; lists
+            </h2>
+            <p className="muted" style={{ fontSize: "var(--fs-sm)", marginBottom: "var(--space-4)" }}>
+              Add, edit, reorder or remove the people and cards shown across the site.
+            </p>
+            <div className="three-col" style={{ marginBottom: "var(--space-8)" }}>
+              <Link href="/branches" className="card" style={cardLink}>
+                <div className="card-head">
+                  <h3 style={{ fontSize: "var(--fs-md)" }}>Branches</h3>
+                  <span className="chip">manage →</span>
+                </div>
+                <p className="muted" style={{ fontSize: "var(--fs-sm)" }}>
+                  Add church plants, edit locations, photos, service times.
+                </p>
+              </Link>
+              {await Promise.all(
+                COLLECTIONS.map(async (c) => {
+                  const rows = await getCollectionRows(c.key);
+                  return (
+                    <Link key={c.key} href={`/website/${c.key}`} className="card" style={cardLink}>
+                      <div className="card-head">
+                        <h3 style={{ fontSize: "var(--fs-md)" }}>{c.title}</h3>
+                        <span className="chip">{rows.length} · manage →</span>
+                      </div>
+                      <p className="muted" style={{ fontSize: "var(--fs-sm)" }}>{c.description}</p>
+                    </Link>
+                  );
+                })
+              )}
+            </div>
+
+            {/* Home text sections */}
+            <h2 style={{ fontSize: "var(--fs-lg)", marginBottom: "var(--space-2)" }}>
+              Homepage text
+            </h2>
+            <p className="muted" style={{ fontSize: "var(--fs-sm)", marginBottom: "var(--space-4)" }}>
+              The wording of the main homepage sections.
             </p>
             {await renderEditors()}
           </>
@@ -66,16 +95,14 @@ export default async function WebsiteContentPage() {
   );
 }
 
+const cardLink: React.CSSProperties = { textDecoration: "none", color: "inherit", display: "block" };
+
 async function renderEditors() {
   const content = await getHomeContent();
   return (
     <div style={{ maxWidth: 760 }}>
       {HOME_SECTIONS.map((schema) => (
-        <SectionEditor
-          key={schema.key}
-          schema={schema}
-          values={content[schema.key] ?? {}}
-        />
+        <SectionEditor key={schema.key} schema={schema} values={content[schema.key] ?? {}} />
       ))}
     </div>
   );
