@@ -2,14 +2,17 @@
 
 import { motion } from 'framer-motion';
 
-const stats = [
+export type StatItem = { number: string; label: string };
+
+const DEFAULT_STATS: StatItem[] = [
   { number: '1994', label: 'Founded' },
   { number: '5+', label: 'Branches' },
   { number: '30+', label: 'Years of Ministry' },
   { number: '1000+', label: 'Members' },
 ];
 
-const StatsStrip = () => {
+const StatsStrip = ({ items }: { items?: StatItem[] }) => {
+  const stats = items && items.length > 0 ? items : DEFAULT_STATS;
   return (
     <section className="stats-strip">
       <div className="stats-strip-inner">

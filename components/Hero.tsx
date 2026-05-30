@@ -3,31 +3,21 @@
 import { useEffect, useRef, useState, useCallback } from 'react';
 import Link from 'next/link';
 
-const SLIDES = [
-  {
-    bg: 'https://images.unsplash.com/photo-1438232992991-995b7058bbb3?q=80&w=1920&auto=format&fit=crop',
-    label: 'Welcome Home',
-    title: 'Christ Kingdom\nSalvation Church',
-    subtitle:
-      'A non-profit Pentecostal church bringing all people to the saving knowledge of our Lord Jesus Christ.',
-  },
-  {
-    bg: 'https://images.unsplash.com/photo-1507692049790-de58290a4334?q=80&w=1920&auto=format&fit=crop',
-    label: 'Join Us for Worship',
-    title: 'Experience the\nPower of God',
-    subtitle:
-      'Every Sunday we gather to worship, praise, and grow together in the Spirit.',
-  },
-  {
-    bg: '/ckspc-photos/3rdhero.png',
-    label: 'Growing Together',
-    title: 'Building Faith,\nTransforming Lives',
-    subtitle:
-      'We exist to establish responsible, self-sustaining churches filled with committed, Spirit-filled Christians.',
-  },
+export type HeroSlide = {
+  bg: string;
+  label: string;
+  title: string;
+  subtitle: string;
+};
+
+const DEFAULT_SLIDES: HeroSlide[] = [
+  { bg: 'https://images.unsplash.com/photo-1438232992991-995b7058bbb3?q=80&w=1920&auto=format&fit=crop', label: 'Welcome Home', title: 'Christ Kingdom\nSalvation Church', subtitle: 'A non-profit Pentecostal church bringing all people to the saving knowledge of our Lord Jesus Christ.' },
+  { bg: 'https://images.unsplash.com/photo-1507692049790-de58290a4334?q=80&w=1920&auto=format&fit=crop', label: 'Join Us for Worship', title: 'Experience the\nPower of God', subtitle: 'Every Sunday we gather to worship, praise, and grow together in the Spirit.' },
+  { bg: '/ckspc-photos/3rdhero.png', label: 'Growing Together', title: 'Building Faith,\nTransforming Lives', subtitle: 'We exist to establish responsible, self-sustaining churches filled with committed, Spirit-filled Christians.' },
 ];
 
-const Hero = () => {
+const Hero = ({ slides }: { slides?: HeroSlide[] }) => {
+  const SLIDES = slides && slides.length > 0 ? slides : DEFAULT_SLIDES;
   const [active, setActive] = useState(0);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const contentRef = useRef<HTMLDivElement>(null);

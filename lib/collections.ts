@@ -114,6 +114,119 @@ export const COLLECTIONS: CollectionDef[] = [
       { imageUrl: "https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=600&auto=format&fit=crop", caption: "" },
     ],
   },
+  // ── Hero slides (home page carousel) ──────────────────────
+  {
+    key: "hero_slides",
+    title: "Hero Slides",
+    description: "The rotating hero banner on the home page.",
+    itemTitle: (d) => d.label || d.title,
+    fields: [
+      { name: "label", label: "Label (small text)", type: "text" },
+      { name: "title", label: "Title (line breaks = \\n)", type: "textarea" },
+      { name: "subtitle", label: "Subtitle", type: "textarea" },
+      { name: "bg", label: "Background image URL", type: "image" },
+    ],
+    defaults: [
+      { label: "Welcome Home", title: "Christ Kingdom\nSalvation Church", subtitle: "A non-profit Pentecostal church bringing all people to the saving knowledge of our Lord Jesus Christ.", bg: "https://images.unsplash.com/photo-1438232992991-995b7058bbb3?q=80&w=1920&auto=format&fit=crop" },
+      { label: "Join Us for Worship", title: "Experience the\nPower of God", subtitle: "Every Sunday we gather to worship, praise, and grow together in the Spirit.", bg: "https://images.unsplash.com/photo-1507692049790-de58290a4334?q=80&w=1920&auto=format&fit=crop" },
+      { label: "Growing Together", title: "Building Faith,\nTransforming Lives", subtitle: "We exist to establish responsible, self-sustaining churches filled with committed, Spirit-filled Christians.", bg: "/ckspc-photos/3rdhero.png" },
+    ],
+  },
+  // ── Stats strip (key numbers) ────────────────────────────
+  {
+    key: "stats",
+    title: "Stats Strip",
+    description: "The key-number strip below the welcome section on the home page.",
+    itemTitle: (d) => `${d.number} — ${d.label}`,
+    fields: [
+      { name: "number", label: "Number / figure", type: "text" },
+      { name: "label", label: "Label", type: "text" },
+    ],
+    defaults: [
+      { number: "1994", label: "Founded" },
+      { number: "5+", label: "Branches" },
+      { number: "30+", label: "Years of Ministry" },
+      { number: "1000+", label: "Members" },
+    ],
+  },
+  // ── Services (worship schedule) ──────────────────────────
+  {
+    key: "services",
+    title: "Services",
+    description: "The service cards on the home page (Sunday Worship, Midweek, etc.).",
+    itemTitle: (d) => d.title,
+    fields: [
+      { name: "title", label: "Service name", type: "text" },
+      { name: "desc", label: "Description", type: "textarea" },
+      { name: "time", label: "Day & time", type: "text" },
+      { name: "img", label: "Photo URL", type: "image", optional: true },
+    ],
+    defaults: [
+      { title: "Sunday Worship", desc: "Join us every Sunday morning for a powerful time of worship, praise, and the preaching of God's Word.", time: "Sundays 9:00 AM", img: "https://images.unsplash.com/photo-1438232992991-995b7058bbb3?q=80&w=700&auto=format&fit=crop" },
+      { title: "Midweek Service", desc: "Recharge your spirit midweek with prayer, Bible study, and fellowship with other believers.", time: "Wednesdays 7:00 PM", img: "https://images.unsplash.com/photo-1507692049790-de58290a4334?q=80&w=700&auto=format&fit=crop" },
+      { title: "Friday Prayer Meeting", desc: "A dedicated time of intercessory prayer and spiritual warfare to seek God's face together.", time: "Fridays 7:00 PM", img: "https://images.unsplash.com/photo-1545987796-200677ee1011?q=80&w=700&auto=format&fit=crop" },
+      { title: "Women's Fellowship", desc: "Building strong women of faith through fellowship, Bible reading, and mutual encouragement.", time: "Wednesdays after Service", img: "https://images.unsplash.com/photo-1529070538774-1843cb3265df?q=80&w=700&auto=format&fit=crop" },
+      { title: "Youth Ministry", desc: "Raising the next generation of Spirit-filled leaders through dynamic worship and mentorship.", time: "Saturdays 4:00 PM", img: "https://images.unsplash.com/photo-1523803326055-9729b9e02e5a?q=80&w=700&auto=format&fit=crop" },
+      { title: "Special Programs", desc: "Weddings, conventions, revival meetings, and special celebrations throughout the year.", time: "As Announced", img: "https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=700&auto=format&fit=crop" },
+    ],
+  },
+  // ── Founder section ──────────────────────────────────────
+  {
+    key: "founder",
+    title: "Founder",
+    description: "The founder tribute section on the home page. Typically one item but can hold multiple figures.",
+    itemTitle: (d) => d.name,
+    fields: [
+      { name: "name", label: "Full name", type: "text" },
+      { name: "role", label: "Role / years", type: "text" },
+      { name: "imageUrl", label: "Photo URL", type: "image", optional: true },
+      { name: "bio1", label: "Bio paragraph 1", type: "textarea" },
+      { name: "bio2", label: "Bio paragraph 2", type: "textarea", optional: true },
+      { name: "bio3", label: "Bio paragraph 3", type: "textarea", optional: true },
+      { name: "quote", label: "Quote", type: "textarea", optional: true },
+    ],
+    defaults: [
+      { name: "Prophetess Beatrice Esther Afua Agyapomaa", role: "Founder & Leader (1929 – 2014)", imageUrl: "/ckspc-photos/97b65d_898e5de6fb484e80a4b783c59d8bc950.jpg", bio1: "Born on February 8, 1929 at Kwahu Tafo, Prophetess Beatrice Esther Afua Agyapomaa was converted to a saving knowledge of our Lord Jesus Christ and received a divine calling to ministry through Prophetess Paulina Agyekumwaa.", bio2: "By 1983, she had begun winning souls for Jesus Christ, starting with 37 converts. Through her unwavering faith and dedication, the Lord used her mightily for the conversion of souls and the outpouring of miracles. On March 20, 1994, God fulfilled His prophecy by giving the church its present name — Christ Kingdom Salvation Pentecostal Church.", bio3: "Under her guidance, the church witnessed immense growth spiritually and physically, expanding to multiple branches across Ghana. She faithfully served the Lord until her call to eternity on December 8, 2014.", quote: "“Nyame som yɛ kyen kyen soo soo” — The call to serve God is to suffer before gain." },
+    ],
+  },
+  // ── Media videos (media page) ────────────────────────────
+  {
+    key: "media_videos",
+    title: "Media Videos",
+    description: "Video highlights shown on the Media & Gallery page.",
+    itemTitle: (d) => d.title,
+    fields: [
+      { name: "title", label: "Title", type: "text" },
+      { name: "label", label: "Category label", type: "text" },
+      { name: "imageUrl", label: "Thumbnail URL", type: "image" },
+      { name: "videoUrl", label: "Video URL (optional)", type: "text", optional: true },
+    ],
+    defaults: [
+      { title: "The Power of Community Worship", label: "Sunday Service", imageUrl: "https://images.unsplash.com/photo-1438232992991-995b7058bbb3?q=80&w=1200", videoUrl: "" },
+      { title: "Easter Sunrise Celebration", label: "Special Event", imageUrl: "https://images.unsplash.com/photo-1507692049790-de58290a4334?q=80&w=800", videoUrl: "" },
+      { title: "Youth Ministry Retreat", label: "Youth Program", imageUrl: "https://images.unsplash.com/photo-1529070538774-1843cb3265df?q=80&w=800", videoUrl: "" },
+    ],
+  },
+  // ── Media gallery photos ─────────────────────────────────
+  {
+    key: "media_gallery",
+    title: "Media Gallery",
+    description: "Photo gallery on the Media & Gallery page.",
+    itemTitle: (d) => d.alt || d.imageUrl,
+    fields: [
+      { name: "imageUrl", label: "Photo URL", type: "image" },
+      { name: "alt", label: "Description / alt text", type: "text" },
+      { name: "category", label: "Category", type: "select", options: ["worship", "community"] },
+    ],
+    defaults: [
+      { imageUrl: "https://images.unsplash.com/photo-1438232992991-995b7058bbb3?q=80&w=800", alt: "Worship gathering", category: "worship" },
+      { imageUrl: "https://images.unsplash.com/photo-1507692049790-de58290a4334?q=80&w=800", alt: "Community prayer", category: "worship" },
+      { imageUrl: "https://images.unsplash.com/photo-1529070538774-1843cb3265df?q=80&w=800", alt: "Fellowship event", category: "community" },
+      { imageUrl: "https://images.unsplash.com/photo-1523803326055-9729b9e02e5a?q=80&w=800", alt: "Church ceremony", category: "worship" },
+      { imageUrl: "https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=800", alt: "Community outreach", category: "community" },
+      { imageUrl: "https://images.unsplash.com/photo-1545987796-200677ee1011?q=80&w=800", alt: "Night worship", category: "worship" },
+    ],
+  },
 ];
 
 export function getCollectionDef(key: string): CollectionDef | undefined {

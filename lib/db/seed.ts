@@ -3,7 +3,7 @@ config({ path: ".env.local" });
 
 import bcrypt from "bcryptjs";
 import { db } from "./index";
-import { users, churchProfile, branches, siteContent, contentItems } from "./schema";
+import { users, churchProfile, branches, siteContent, contentItems, members, collections as collectionsTable, tithes, expenses } from "./schema";
 import { sql, eq } from "drizzle-orm";
 import { homeDefaults } from "../content";
 import { COLLECTIONS } from "../collections";
@@ -100,10 +100,97 @@ async function main() {
     }
   }
 
+  // ── Members ────────────────────────────────────────────────
+  const ghNames = [
+    ["Kwame", "Asante"], ["Ama", "Mensah"], ["Kofi", "Owusu"], ["Akua", "Boateng"],
+    ["Yaw", "Appiah"], ["Abena", "Darko"], ["Kwesi", "Frimpong"], ["Efua", "Nyamekye"],
+    ["Kojo", "Tetteh"], ["Afia", "Adjei"], ["Nana", "Osei"], ["Adwoa", "Bonsu"],
+    ["Kwabena", "Agyemang"], ["Akosua", "Nkrumah"], ["Papa", "Amankwah"],
+  ];
+  const statuses = ["Full Member", "Full Member", "Full Member", "New Convert", "Visitor"];
+  const depts = ["Choir", "Ushering", "Protocol", "Media", "Youth", "Children", "Welfare", "Prayer"];
+  const branchNames = branchRows.map((b) => b.name);
+  await db.delete(members);
+  for (let i = 0; i < ghNames.length; i++) {
+    const [first, last] = ghNames[i];
+    await db.insert(members).values({
+      memberId: `CKSPC-M-${String(i + 1).padStart(4, "0")}`,
+      firstName: first,
+      lastName: last,
+      gender: i % 2 === 0 ? "Male" : "Female",
+      phone: `+233 ${20 + (i % 8)}0 ${100 + i * 7} ${2000 + i * 13}`,
+      branch: branchNames[i % branchNames.length],
+      status: statuses[i % statuses.length],
+      joinedDate: `${2018 + (i % 6)}-0${(i % 9) + 1}-15`,
+      baptised: i % 3 !== 0,
+      department: depts[i % depts.length],
+      isMinor: i === 14,
+    });
+  }
+
+  // ── Finance — Collections ─────────────────────────────────
+  await db.delete(collectionsTable);
+  const finBranches = ["Madina Central", "Danfa Assembly", "Tema Community"];
+  const finDates = ["2026-05-04", "2026-05-11", "2026-05-18", "2026-05-25"];
+  let colIdx = 1;
+  for (const d of finDates) {
+    for (const br of finBranches) {
+      const t = Math.round(8000 + Math.random() * 6000);
+      const o = Math.round(2000 + Math.random() * 3000);
+      await db.insert(collectionsTable).values({
+        collectionId: `COL-2026-${String(colIdx++).padStart(3, "0")}`,
+        date: d,
+        branch: br,
+        service: "Sunday Service",
+        tithes: t,
+        offerings: o,
+        thanksgiving: Math.round(500 + Math.random() * 1500),
+        designated: Math.round(200 + Math.random() * 800),
+        welfareFund: Math.round(100 + Math.random() * 400),
+        recorder: ghNames[colIdx % ghNames.length].join(" "),
+        approver: colIdx % 3 === 0 ? null : "Rev. Samuel Boateng",
+        status: colIdx % 3 === 0 ? "Pending" : "Approved",
+      });
+    }
+  }
+
+  // ── Finance — Expenses ────────────────────────────────────
+  await db.delete(expenses);
+  const expCats = ["Utilities", "Rent", "Equipment", "Event", "Ministry"];
+  const expDescs = ["Electricity bill May", "Hall rental for revival", "New microphone set", "Youth camp catering", "Evangelism transport"];
+  for (let i = 0; i < 8; i++) {
+    await db.insert(expenses).values({
+      expenseId: `EXP-2026-${String(i + 1).padStart(3, "0")}`,
+      date: `2026-05-${String(3 + i * 3).padStart(2, "0")}`,
+      branch: finBranches[i % finBranches.length],
+      category: expCats[i % expCats.length],
+      description: expDescs[i % expDescs.length],
+      amount: Math.round(500 + Math.random() * 4000),
+      requestor: ghNames[i % ghNames.length].join(" "),
+      approver: i % 2 === 0 ? "National Admin" : null,
+      status: i % 2 === 0 ? "Approved" : "Pending",
+    });
+  }
+
+  // ── Finance — Tithes ──────────────────────────────────────
+  await db.delete(tithes);
+  for (let i = 0; i < 10; i++) {
+    await db.insert(tithes).values({
+      date: `2026-05-${String(4 + i * 2).padStart(2, "0")}`,
+      memberId: `CKSPC-M-${String(i + 1).padStart(4, "0")}`,
+      memberName: ghNames[i].join(" "),
+      branch: branchNames[i % branchNames.length],
+      amount: Math.round(100 + Math.random() * 900),
+      mode: ["Cash", "Mobile Money", "Bank Transfer"][i % 3],
+    });
+  }
+
   const [{ count: userCount }] = await db
     .select({ count: sql<number>`count(*)::int` })
     .from(users);
-  console.log(`✓ Seed complete. ${userCount} users, ${branchRows.length} branches, ${homeSections.length} home sections.`);
+  const [{ count: memberCount }] = await db.select({ count: sql<number>`count(*)::int` }).from(members);
+  const [{ count: colCount }] = await db.select({ count: sql<number>`count(*)::int` }).from(collectionsTable);
+  console.log(`✓ Seed complete. ${userCount} users, ${branchRows.length} branches, ${memberCount} members, ${colCount} collections.`);
   console.log("  Login: overseer@ckspc.org / ckspc-admin");
   process.exit(0);
 }

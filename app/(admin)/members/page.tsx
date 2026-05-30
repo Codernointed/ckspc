@@ -3,14 +3,12 @@ import { Topbar } from "../../../components/Topbar";
 import { PageHead } from "../../../components/PageHead";
 import { DataTable } from "../../../components/DataTable";
 import { Kpi } from "../../../components/dashboard/Kpi";
-import { members, formatGHS } from "../../../lib/mock-data";
+import { getMembers, getMemberStats } from "../../../lib/members";
 
-export default function MembersPage() {
-  const total = members.length;
-  const fullMembers = members.filter((m) => m.status === "Full Member").length;
-  const newThisMonth = members.filter((m) => m.joined.startsWith("2026-05")).length;
-  const visitors = members.filter((m) => m.status === "Visitor").length;
-  const minors = members.filter((m) => m.minor).length;
+export const dynamic = "force-dynamic";
+
+export default async function MembersPage() {
+  const [membersList, stats] = await Promise.all([getMembers(), getMemberStats()]);
 
   return (
     <>
@@ -20,63 +18,36 @@ export default function MembersPage() {
           eyebrow="People · Church CRM"
           title="The roll of"
           emphasis="the household."
-          lede="Every person connected to the church — visitor, new convert, full member, minor — is here. Filter by branch, status, department, or attendance band."
+          lede="Every person connected to the church — visitor, new convert, full member, minor — is here."
           actions={
             <>
-              <button className="btn btn-secondary">Export</button>
-              <button className="btn btn-primary">Register member</button>
+              <Link href="/members/new" className="btn btn-primary">+ Register member</Link>
             </>
           }
         />
 
         <section className="kpi-grid">
-          <Kpi label="Total on the roll" value={total.toLocaleString()} foot="Across all branches" featured />
-          <Kpi label="Full members" value={fullMembers.toLocaleString()} foot="Confirmed + baptised" />
-          <Kpi label="New this month" value={newThisMonth.toLocaleString()} foot="Visitors + new converts" />
-          <Kpi label="Open visitors" value={visitors.toLocaleString()} foot="Awaiting follow-up" />
-          <Kpi label="Minors" value={minors.toLocaleString()} foot="Under 18 · restricted" />
+          <Kpi label="Total on the roll" value={stats.total.toLocaleString()} foot="Across all branches" featured />
+          <Kpi label="Full members" value={stats.fullMembers.toLocaleString()} foot="Confirmed" />
+          <Kpi label="New converts" value={stats.newConverts.toLocaleString()} foot="Awaiting discipleship" />
+          <Kpi label="Visitors" value={stats.visitors.toLocaleString()} foot="Awaiting follow-up" />
+          <Kpi label="Minors" value={stats.minors.toLocaleString()} foot="Under 18 · restricted" />
         </section>
 
-        <div className="filter-bar">
-          <input className="grow" placeholder="Search by name, member ID, phone…" />
-          <select>
-            <option>All branches</option>
-            <option>Madina Central</option>
-            <option>Kasoa</option>
-            <option>Kumasi Central</option>
-            <option>Tema Community 4</option>
-            <option>Takoradi</option>
-            <option>Ho</option>
-          </select>
-          <select>
-            <option>Any status</option>
-            <option>Full Member</option>
-            <option>New Convert</option>
-            <option>Visitor</option>
-            <option>Inactive</option>
-          </select>
-          <select>
-            <option>Any department</option>
-            <option>Choir / Music</option>
-            <option>Ushering</option>
-            <option>Children's</option>
-            <option>Youth</option>
-          </select>
-          <button className="btn btn-ghost">Reset</button>
-        </div>
-
         <DataTable
-          rows={members}
-          getKey={(m) => m.id}
+          rows={membersList}
+          getKey={(m) => m.memberId}
           columns={[
             { header: "Member", render: (m) => (
               <div>
-                <Link href={`/members/${m.id}`} style={{ fontFamily: "var(--font-display)", color: "var(--fg)" }}>{m.name}</Link>
-                {m.minor && <span className="chip warning" style={{ marginLeft: 8 }}>Minor</span>}
-                <div className="mono" style={{ color: "var(--fg-subtle)" }}>{m.id}</div>
+                <Link href={`/members/${m.memberId}`} style={{ fontFamily: "var(--font-display)", color: "var(--fg)" }}>
+                  {m.firstName} {m.lastName}
+                </Link>
+                {m.isMinor && <span className="chip warning" style={{ marginLeft: 8 }}>Minor</span>}
+                <div className="mono" style={{ color: "var(--fg-subtle)" }}>{m.memberId}</div>
               </div>
             )},
-            { header: "Branch", render: (m) => <span>{m.branch}</span> },
+            { header: "Branch", render: (m) => <span>{m.branch ?? "—"}</span> },
             { header: "Status", render: (m) => {
               const tone =
                 m.status === "Full Member" ? "success" :
@@ -85,15 +56,14 @@ export default function MembersPage() {
               return <span className={`chip ${tone}`}>{m.status}</span>;
             }},
             { header: "Department", render: (m) => m.department ?? <span className="subtle">—</span> },
-            { header: "Attend.", align: "right", mono: true, render: (m) => `${m.attendance}%` },
-            { header: "Giving (May)", align: "right", mono: true, render: (m) => formatGHS(m.giving) },
-            { header: "Phone", mono: true, render: (m) => m.phone },
+            { header: "Phone", mono: true, render: (m) => m.phone ?? "—" },
+            { header: "Joined", mono: true, render: (m) => m.joinedDate ?? "—" },
           ]}
         />
 
         <div className="folio-foot">
           <span>· members · roll of the household ·</span>
-          <span>Folio 06 · {total} records</span>
+          <span>Folio 06 · {stats.total} records</span>
         </div>
       </main>
     </>

@@ -19,9 +19,10 @@ async function guard(): Promise<{ email: string } | ItemResult> {
 }
 
 function revalidateFor(collection: string) {
-  revalidatePath("/"); // gallery on home
+  revalidatePath("/"); // hero, stats, services, founder, gallery on home
   revalidatePath("/leadership");
   revalidatePath("/ministries");
+  revalidatePath("/media");
   revalidatePath(`/website/${collection}`);
 }
 

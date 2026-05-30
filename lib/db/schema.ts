@@ -131,3 +131,94 @@ export const contentItems = pgTable("content_items", {
 
 export type ContentItem = typeof contentItems.$inferSelect;
 export type NewContentItem = typeof contentItems.$inferInsert;
+
+// ============================================================
+// MEMBERS
+// ============================================================
+
+export const members = pgTable("members", {
+  id: serial("id").primaryKey(),
+  memberId: text("member_id").notNull().unique(), // e.g. CKSPC-M-0001
+  firstName: text("first_name").notNull(),
+  lastName: text("last_name").notNull(),
+  otherNames: text("other_names"),
+  gender: text("gender"), // Male / Female
+  dateOfBirth: text("date_of_birth"),
+  phone: text("phone"),
+  email: text("email"),
+  address: text("address"),
+  branch: text("branch"), // branch name
+  status: text("status").notNull().default("Full Member"), // Full Member, New Convert, Visitor, Inactive, Transferred
+  joinedDate: text("joined_date"),
+  baptised: boolean("baptised").default(false),
+  department: text("department"),
+  cellGroup: text("cell_group"),
+  isMinor: boolean("is_minor").default(false),
+  notes: text("notes"),
+  imageUrl: text("image_url"),
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
+});
+
+export type Member = typeof members.$inferSelect;
+export type NewMember = typeof members.$inferInsert;
+
+// ============================================================
+// FINANCE
+// ============================================================
+
+/** Sunday / midweek collection records. */
+export const collections = pgTable("collections", {
+  id: serial("id").primaryKey(),
+  collectionId: text("collection_id").notNull().unique(), // COL-2026-001
+  date: text("date").notNull(),
+  branch: text("branch").notNull(),
+  service: text("service").notNull(), // "Sunday Service", "Midweek", etc.
+  tithes: doublePrecision("tithes").default(0),
+  offerings: doublePrecision("offerings").default(0),
+  thanksgiving: doublePrecision("thanksgiving").default(0),
+  designated: doublePrecision("designated").default(0),
+  welfareFund: doublePrecision("welfare_fund").default(0),
+  recorder: text("recorder").notNull(),
+  approver: text("approver"),
+  status: text("status").notNull().default("Pending"), // Pending, Approved, Rejected
+  notes: text("notes"),
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+});
+
+export type Collection = typeof collections.$inferSelect;
+export type NewCollection = typeof collections.$inferInsert;
+
+/** Tithe ledger — individual tithe records linked to members. */
+export const tithes = pgTable("tithes", {
+  id: serial("id").primaryKey(),
+  date: text("date").notNull(),
+  memberId: text("member_id"), // links to members.memberId
+  memberName: text("member_name").notNull(),
+  branch: text("branch").notNull(),
+  amount: doublePrecision("amount").notNull(),
+  mode: text("mode").notNull().default("Cash"), // Cash, Mobile Money, Bank Transfer, Cheque
+  collectionId: text("collection_id"), // links to collections.collectionId
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+});
+
+export type Tithe = typeof tithes.$inferSelect;
+
+/** Expense requests. */
+export const expenses = pgTable("expenses", {
+  id: serial("id").primaryKey(),
+  expenseId: text("expense_id").notNull().unique(), // EXP-2026-001
+  date: text("date").notNull(),
+  branch: text("branch").notNull(),
+  category: text("category").notNull(), // Utilities, Rent, Equipment, Event, Ministry
+  description: text("description").notNull(),
+  amount: doublePrecision("amount").notNull(),
+  requestor: text("requestor").notNull(),
+  approver: text("approver"),
+  status: text("status").notNull().default("Pending"), // Pending, Approved, Rejected
+  notes: text("notes"),
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+});
+
+export type Expense = typeof expenses.$inferSelect;
+export type NewExpense = typeof expenses.$inferInsert;
