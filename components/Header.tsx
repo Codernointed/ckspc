@@ -23,6 +23,7 @@ const Header = () => {
     { href: '/leadership', label: 'Leadership' },
     { href: '/media', label: 'Media' },
     { href: isHome ? '#branches' : '/#branches', label: 'Branches' },
+    { href: '/give', label: 'Give' },
     { href: isHome ? '#contact' : '/#contact', label: 'Contact' },
   ];
 
